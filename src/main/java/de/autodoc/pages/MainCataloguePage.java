@@ -11,7 +11,7 @@ import static de.autodoc.util.InteractionMethods.*;
 public class MainCataloguePage extends BasePage {
 
     private MainCataloguePageObjects mainCataloguePageObjects;
-    private static final int LEFT_SHIFT_PERCENTAGE = 60;
+    private static final int LEFT_SHIFT_PERCENTAGE = 90;
 
     MainCataloguePage(AndroidDriver driver) {
         super(driver);
@@ -44,12 +44,14 @@ public class MainCataloguePage extends BasePage {
     }
 
     public EditCarPage clickEditButton() {
-        mainCataloguePageObjects.EditButton.click();
+        clickSimulation(this.driver, mainCataloguePageObjects.EditButton);
+        //mainCataloguePageObjects.EditButton.click();
         return new EditCarPage(driver);
     }
 
     public void clickDeleteButton() {
-        mainCataloguePageObjects.DeleteButton.click();
+        clickSimulation(this.driver, mainCataloguePageObjects.DeleteButton);
+        //mainCataloguePageObjects.DeleteButton.click();
         waitForPresence(this.driver, mainCataloguePageObjects.AddCarButton);
     }
 }

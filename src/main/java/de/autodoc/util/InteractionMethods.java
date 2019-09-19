@@ -5,6 +5,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -21,30 +22,30 @@ public class InteractionMethods {
 
     }
 
-    public static boolean pageContainsText(AndroidDriver driver, String text) {
-        return driver.getPageSource().contains(text);
-    }
-
     public static void clickOnTextView(AndroidDriver driver, String text) {
         driver.findElementByXPath("//android.widget.TextView[@text='" + text + "']").click();
     }
 
-    private static int[] getCoordinatesOfMiddleRightEdgeOfElement(AndroidElement androidElement) {
-        int x = (androidElement.getLocation().getX() + androidElement.getSize().width) - 1;
-        int y = (androidElement.getLocation().getY() * 2 + androidElement.getSize().height) / 2;
-
-        return new int[]{x, y};
-    }
 
     public static void scrollElementLeftByNPercents(AndroidDriver driver, AndroidElement androidElement, int percents) {
-        int[] coordinates = getCoordinatesOfMiddleRightEdgeOfElement(androidElement);
-        int x = coordinates[0];
-        int y = coordinates[1];
-        int shiftedX = x * percents / 100;
+        Point p = androidElement.getCenter();
+        int x = p.getX();
+        int y = p.getY();
+        int shiftedX = x * (100 - percents) / 100;
         int shiftedY = y;
         TouchAction t = new TouchAction(driver);
         t.press(PointOption.point(x, y))
                 .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1))).moveTo(PointOption.point(shiftedX, shiftedY))
+                .release().perform();
+    }
+
+    public static void clickSimulation(AndroidDriver driver, AndroidElement androidElement) {
+        Point p = androidElement.getCenter();
+        System.out.println(p.getX() + " " + p.x);
+        System.out.println(p.getY() + " " + p.y);
+        TouchAction t = new TouchAction(driver);
+        t.press(PointOption.point(p.getX(), p.getY()))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(200)))
                 .release().perform();
     }
 

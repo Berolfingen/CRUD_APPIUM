@@ -6,9 +6,11 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.support.PageFactory;
 
+import static de.autodoc.util.InteractionMethods.clickSimulation;
 import static de.autodoc.util.InteractionMethods.waitForPresence;
 
 public class EditCarPage extends BasePage {
+
     private EditCarPageObjects editCarPageObjects;
 
     EditCarPage(AndroidDriver driver) {
@@ -45,7 +47,8 @@ public class EditCarPage extends BasePage {
 
     public MainCataloguePage clickDeleteButton() {
         waitForPresence(this.driver, editCarPageObjects.EditYourVehiclesView);
-        editCarPageObjects.DeleteButton.click();
+        clickSimulation(this.driver, editCarPageObjects.DeleteButton);
+        //editCarPageObjects.DeleteButton.click();
 
         return new MainCataloguePage(driver);
     }

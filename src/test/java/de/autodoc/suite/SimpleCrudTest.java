@@ -3,6 +3,7 @@ package de.autodoc.suite;
 import de.autodoc.core.BasePage;
 import de.autodoc.pages.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.connection.ConnectionStateBuilder;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -11,8 +12,6 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.lang.reflect.Method;
-
-import static de.autodoc.util.InteractionMethods.pageContainsText;
 
 public class SimpleCrudTest {
 
@@ -33,10 +32,19 @@ public class SimpleCrudTest {
 
     @BeforeClass
     public void setUp() {
+        SoftAssert softAssert = new SoftAssert();
         logger.info("Starting setUp");
         this.driver = new BasePage(driver).build();
+        logger.info("Turning on Internet");
+        this.driver.setConnection(new ConnectionStateBuilder().withWiFiEnabled().withDataEnabled().build());
+
+        logger.info("Checking Internet connection");
+        softAssert.assertTrue(driver.getConnection().isDataEnabled());
+        softAssert.assertTrue(driver.getConnection().isWiFiEnabled());
         StartPage startPage = new StartPage(driver);
         mainCataloguePage = startPage.clickFrance();
+
+        softAssert.assertAll();
     }
 
     @BeforeMethod
@@ -63,9 +71,11 @@ public class SimpleCrudTest {
         mainCataloguePage = vehiclesCataloguePage.addEngine(FIRST_CHOSEN_CAR_ENGINE);
 
         logger.info("Check that chosen car features are on the main page.");
-        softAssert.assertTrue(pageContainsText(driver, FIRST_CHOSEN_CAR));
-        softAssert.assertTrue(pageContainsText(driver, FIRST_CHOSEN_CAR_SERIES));
-        softAssert.assertTrue(pageContainsText(driver, FIRST_CHOSEN_CAR_ENGINE));
+        String pageSource = driver.getPageSource();
+
+        softAssert.assertTrue(pageSource.contains(FIRST_CHOSEN_CAR));
+        softAssert.assertTrue(pageSource.contains(FIRST_CHOSEN_CAR_SERIES));
+        softAssert.assertTrue(pageSource.contains(FIRST_CHOSEN_CAR_ENGINE));
 
         softAssert.assertAll();
     }
@@ -97,9 +107,11 @@ public class SimpleCrudTest {
         mainCataloguePage = editCarPage.clickSaveChanges();
 
         logger.info("Check that changed car features are on the main page.");
-        softAssert.assertTrue(pageContainsText(driver, EDITED_CHOSEN_CAR));
-        softAssert.assertTrue(pageContainsText(driver, EDITED_CHOSEN_CAR_SERIES));
-        softAssert.assertTrue(pageContainsText(driver, EDITED_CHOSEN_CAR_ENGINE));
+        String pageSource = driver.getPageSource();
+
+        softAssert.assertTrue(pageSource.contains(EDITED_CHOSEN_CAR));
+        softAssert.assertTrue(pageSource.contains(EDITED_CHOSEN_CAR_SERIES));
+        softAssert.assertTrue(pageSource.contains(EDITED_CHOSEN_CAR_ENGINE));
 
         softAssert.assertAll();
     }
@@ -116,6 +128,13 @@ public class SimpleCrudTest {
         logger.info("Check that button meaning we haven't chosen a single car yet is present");
         softAssert.assertTrue(mainCataloguePage.addCarButtonIsPresent());
 
+        logger.info("Check that previously chosen car features are not present on the main page.");
+        String pageSource = driver.getPageSource();
+
+        softAssert.assertFalse(pageSource.contains(EDITED_CHOSEN_CAR));
+        softAssert.assertFalse(pageSource.contains(EDITED_CHOSEN_CAR_SERIES));
+        softAssert.assertFalse(pageSource.contains(EDITED_CHOSEN_CAR_ENGINE));
+
         softAssert.assertAll();
     }
 
@@ -131,9 +150,11 @@ public class SimpleCrudTest {
         vehiclesCataloguePage.clickOnCarDataFields(SECOND_TEST_CHOSEN_CAR_SERIES);
         mainCataloguePage = vehiclesCataloguePage.addEngine(SECOND_TEST_CHOSEN_CAR_ENGINE);
 
-        softAssert.assertTrue(pageContainsText(driver, SECOND_TEST_CHOSEN_CAR));
-        softAssert.assertTrue(pageContainsText(driver, SECOND_TEST_CHOSEN_CAR_SERIES));
-        softAssert.assertTrue(pageContainsText(driver, SECOND_TEST_CHOSEN_CAR_ENGINE));
+        logger.info("Check that chosen car features are on the main page.");
+        String pageSource = driver.getPageSource();
+        softAssert.assertTrue(pageSource.contains(SECOND_TEST_CHOSEN_CAR));
+        softAssert.assertTrue(pageSource.contains(SECOND_TEST_CHOSEN_CAR_SERIES));
+        softAssert.assertTrue(pageSource.contains(SECOND_TEST_CHOSEN_CAR_ENGINE));
 
         softAssert.assertAll();
     }
@@ -151,6 +172,12 @@ public class SimpleCrudTest {
 
         logger.info("Check that button meaning we haven't chosen a single car yet is present");
         softAssert.assertTrue(mainCataloguePage.addCarButtonIsPresent());
+
+        logger.info("Check that previously chosen car features are not present on the main page.");
+        String pageSource = driver.getPageSource();
+        softAssert.assertFalse(pageSource.contains(SECOND_TEST_CHOSEN_CAR));
+        softAssert.assertFalse(pageSource.contains(SECOND_TEST_CHOSEN_CAR_SERIES));
+        softAssert.assertFalse(pageSource.contains(SECOND_TEST_CHOSEN_CAR_ENGINE));
 
         softAssert.assertAll();
     }

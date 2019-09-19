@@ -22,7 +22,6 @@ public class CarMenuPage extends BasePage {
         waitForPresence(this.driver, carMenuPageObjects.AddBySelectorLayout);
         carMenuPageObjects.CarMaker.click();
         return new VehiclesCataloguePage(driver);
-
     }
 }
 

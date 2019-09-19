@@ -41,7 +41,7 @@ public class BasePage {
         }
 
         cap = new DesiredCapabilities();
-        cap.setCapability(MobileCapabilityType.DEVICE_NAME, prop.getProperty("emulator.name"));
+        cap.setCapability(MobileCapabilityType.DEVICE_NAME, prop.getProperty("device.name"));
         cap.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID);
         cap.setCapability(MobileCapabilityType.APP, fs.getAbsolutePath());
         cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, APP_PACKAGE);
