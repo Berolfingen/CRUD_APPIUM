@@ -4,6 +4,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.remote.MobilePlatform;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.*;
@@ -13,6 +14,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class BasePage {
+    private static Logger logger = Logger.getLogger(BasePage.class);
     private DesiredCapabilities cap;
     private static final String APP_PACKAGE = "de.autodoc.gmbh";
     private static final String APP_ACTIVITY = "de.autodoc.gmbh.ui.activity.SplashActivity";
@@ -37,7 +39,7 @@ public class BasePage {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Can't find the properties file");
+            logger.error("Can't find the properties file");
         }
 
         cap = new DesiredCapabilities();

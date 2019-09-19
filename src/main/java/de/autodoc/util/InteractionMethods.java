@@ -39,10 +39,9 @@ public class InteractionMethods {
                 .release().perform();
     }
 
+    //Use this method for some imageButtons for those click method doesn't work from time to time.
     public static void clickSimulation(AndroidDriver driver, AndroidElement androidElement) {
         Point p = androidElement.getCenter();
-        System.out.println(p.getX() + " " + p.x);
-        System.out.println(p.getY() + " " + p.y);
         TouchAction t = new TouchAction(driver);
         t.press(PointOption.point(p.getX(), p.getY()))
                 .waitAction(WaitOptions.waitOptions(Duration.ofMillis(200)))
