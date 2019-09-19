@@ -26,10 +26,12 @@ public class BasePage {
     }
 
     private void initDriver() {
-        File f = new File("src" + SLASH + "main" + SLASH + "resources" + SLASH);
+        String pathToFolder = String.format("src%1$smain%1$sresources%1$s", SLASH);
+        String pathToPropertiesFile = String.format("src%1$smain%1$sresources%1$stest.properties", SLASH);
+        File f = new File(pathToFolder);
         File fs = new File(f, "AutoDoc.apk");
 
-        try (InputStream input = new FileInputStream("src" + SLASH + "main" + SLASH + "resources" + SLASH + "test.properties")) {
+        try (InputStream input = new FileInputStream(pathToPropertiesFile)) {
             prop = new Properties();
             prop.load(input);
         } catch (FileNotFoundException e) {
